@@ -1,0 +1,1 @@
+SELECT DISTINCT CAST(pop_year AS int) FROM "public"."dashboard_energy_tuc_002" ORDER BY pop_year

@@ -1,0 +1,64 @@
+PREFIX cbhsv: <http://data.builthub.eu/ontology/cbhsv#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+
+SELECT ?locationName ?Domestic_Hot_Water ?Space_Cooling ?Space_Heating
+WHERE{
+  {
+    SELECT ?locationName (SUM(DISTINCT ?msrValue) AS ?Domestic_Hot_Water) ?nutsURI
+    WHERE{
+      ?s	a cbhsv:Dataset001 ;
+  cbhsv:sector <http://data.builthub.eu/resource/set/Sector/ResidentialSector>;
+  cbhsv:subsector <http://data.builthub.eu/resource/set/SubSector/Total>;
+  cbhsv:feature <http://data.builthub.eu/resource/set/Feature/FinalEnergyConsumption>;
+  cbhsv:type <http://data.builthub.eu/resource/set/Type/DomesticHotWater> ;
+  cbhsv:hasNUTS ?nutsURI ;
+  dcat:spatial/skos:prefLabel ?locationName ;
+  cbhsv:measurementValue ?msrValue  .
+      FILTER (lang(?locationName) = 'en')
+    }
+    GROUP BY ?locationName ?nutsURI
+  }
+  {
+    SELECT ?locationName (SUM(DISTINCT ?msrValue) AS ?Space_Cooling) ?nutsURI
+    WHERE{
+      ?s	a cbhsv:Dataset001 ;
+  cbhsv:sector <http://data.builthub.eu/resource/set/Sector/ResidentialSector>;
+  cbhsv:subsector <http://data.builthub.eu/resource/set/SubSector/Total>;
+  cbhsv:feature <http://data.builthub.eu/resource/set/Feature/FinalEnergyConsumption>;
+  cbhsv:type <http://data.builthub.eu/resource/set/Type/SpaceCooling> ;
+  cbhsv:hasNUTS ?nutsURI ;
+  dcat:spatial/skos:prefLabel ?locationName ;
+  cbhsv:measurementValue ?msrValue  .
+      FILTER (lang(?locationName) = 'en')
+    }
+    GROUP BY ?locationName ?nutsURI
+  }
+  {
+    SELECT ?locationName (SUM(DISTINCT ?msrValue) AS ?Space_Heating) ?nutsURI
+    WHERE{
+      ?s	a cbhsv:Dataset001 ;
+  cbhsv:sector <http://data.builthub.eu/resource/set/Sector/ResidentialSector>;
+  cbhsv:subsector <http://data.builthub.eu/resource/set/SubSector/Total>;
+  cbhsv:feature <http://data.builthub.eu/resource/set/Feature/FinalEnergyConsumption>;
+  cbhsv:type <http://data.builthub.eu/resource/set/Type/SpaceHeating> ;
+  cbhsv:hasNUTS ?nutsURI ;
+  dcat:spatial/skos:prefLabel ?locationName ;
+  cbhsv:measurementValue ?msrValue  .
+      FILTER (lang(?locationName) = 'en')
+    }
+    GROUP BY ?locationName ?nutsURI
+  }
+  {
+    SELECT ?region ?nutsURI
+    WHERE{
+      ?clireg a skos:Concept ;
+  skos:inScheme <http://data.builthub.eu/climate_regions> ;
+  skos:narrower ?nutsURI ;
+  skos:prefLabel ?region .
+    }
+  }
+}
+ORDER BY ?region ?locationName
+LIMIT 30

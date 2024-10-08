@@ -1,0 +1,30 @@
+prefix dcat: <http://www.w3.org/ns/dcat#>
+prefix dc: <http://purl.org/dc/elements/1.1/>
+prefix dct: <http://purl.org/dc/terms/>
+prefix freq: <http://purl.org/cld/freq/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix siec: <http://dd.eionet.europa.eu/vocabulary/eurostat/siec/>
+prefix nuts: <http://data.europa.eu/nuts/>
+prefix skos: <http://www.w3.org/2004/02/skos/core#>
+prefix adms: <http://www.w3.org/ns/adms#>
+prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix cbhsv: <https://data.builthub.eu/ontology/cbhsv#>
+
+SELECT DISTINCT ?identifier ?startDate ?endDate ?location ?nutsLevel ?nutsName ?availableFlag ?measuredElement ?msrValue ?msrUnit
+WHERE {
+	?s	a cbhsv:Dataset027 ;
+		dc:identifier ?identifier ;
+  		dct:temporal/dcat:startDate ?startDate ;
+  		dct:temporal/dcat:endDate ?endDate ;
+		dcat:spatial/skos:prefLabel ?location ;
+		cbhsv:availableFlag ?availableFlag ;
+		cbhsv:measuredElement ?measuredElement ;
+		cbhsv:measurementUnit ?msrUnit;
+		cbhsv:measurementValue ?msrValue .
+
+  	OPTIONAL {?s cbhsv:hasNUTS/nuts:level ?nutsLevel }
+  	OPTIONAL {?s cbhsv:hasNUTS/skos:prefLabel ?nutsName }
+  	
+	FILTER (lang(?location) = 'en')
+}

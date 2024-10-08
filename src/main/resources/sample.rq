@@ -1,0 +1,34 @@
+prefix dcat: <http://www.w3.org/ns/dcat#>
+prefix dc: <http://purl.org/dc/elements/1.1/>
+prefix dct: <http://purl.org/dc/terms/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix siec: <http://dd.eionet.europa.eu/vocabulary/eurostat/siec/>
+prefix nuts: <http://data.europa.eu/nuts/>
+prefix skos: <http://www.w3.org/2004/02/skos/core#>
+prefix adms: <http://www.w3.org/ns/adms#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix cbhsv: <https://data.builthub.eu/ontology/cbhsv#>
+
+SELECT DISTINCT ?identifier ?startDate ?endDate ?location ?nutsLevel ?btype ?energy ?measuredElement ?topic ?msrValue ?msrUnit
+WHERE {
+	?s	dc:identifier ?identifier ;
+		dct:temporal/dcat:startDate ?startDate ;
+		dct:temporal/dcat:endDate ?endDate ;
+		dcat:spatial ?locationIRI ;
+		dcat:spatial/skos:prefLabel ?location ;
+		cbhsv:hasNUTS/nuts:level ?nutsLevel ;
+		cbhsv:measurementUnit ?msrUnit;
+		cbhsv:measurementValue ?msrValue .
+
+	OPTIONAL {?s cbhsv:measuredElement ?measuredElement }
+	OPTIONAL {?s cbhsv:btype ?btypeUri }
+  	OPTIONAL {?s cbhsv:btype/skos:prefLabel ?btype }
+  	OPTIONAL {?s cbhsv:topic ?topicUri }
+  	OPTIONAL {?s cbhsv:topic/skos:prefLabel ?topic }
+	OPTIONAL {?s cbhsv:siec ?energyUri }
+	OPTIONAL {?s cbhsv:siec/skos:prefLabel ?energy }
+
+	FILTER (lang(?location) = 'en')
+	FILTER (?nutsLevel="0"^^xsd:decimal)
+}
+        

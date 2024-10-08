@@ -1,0 +1,30 @@
+PREFIX cbhsv: <http://data.builthub.eu/ontology/cbhsv#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT DISTINCT ?nutsName (((?value1*100000)/?value2) AS ?Final_energy)
+WHERE{
+  {
+ SELECT DISTINCT  ?nutsName ?value1
+WHERE {
+	?s	a cbhsv:Dataset014 ;
+  		dct:temporal/dcat:startDate "2019-01-01"^^xsd:date ;
+		cbhsv:hasNUTS/skos:prefLabel ?nutsName ;
+		cbhsv:measurementValue ?value1  .
+}
+}
+{
+  SELECT DISTINCT ?nutsName ?value2
+WHERE {
+	?s	a cbhsv:Dataset026 ;
+  		dct:temporal/dcat:startDate "2019-01-01"^^xsd:date ;
+		cbhsv:hasNUTS/skos:prefLabel ?nutsName ;
+		cbhsv:measuredElement <http://purl.org/linked-data/sdmx/2009/code#T> ;
+		cbhsv:measurementValue ?value2 .
+}
+  }
+  FILTER(!CONTAINS(?nutsName, "EU27"))
+  FILTER(!CONTAINS(?nutsName, "EU28"))
+}
+ORDER BY ?nutsName

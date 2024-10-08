@@ -1,0 +1,1 @@
+SELECT DISTINCT alg_name FROM "public"."ml_alg"

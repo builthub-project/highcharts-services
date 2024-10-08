@@ -1,0 +1,1 @@
+SELECT DISTINCT topic_type FROM "public"."dashboard_energy_tuc_002" ORDER BY topic_type

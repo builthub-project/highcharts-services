@@ -1,0 +1,55 @@
+PREFIX cbhsv: <http://data.builthub.eu/ontology/cbhsv#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX ns72: <http://data.europa.eu/nuts/>
+PREFIX : <http://dd.eionet.europa.eu/property/>
+prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?locationName ?sectorName ?buildingTypeName
+?buildingAgeStart ?buildingAgeEnd ?energyUseName
+?energyTypeName ?measurementValue ?measurementUnit ?AvgConsumption
+
+#Sector
+where {
+    ?dataset a cbhsv:Dataset001 .
+
+    # SECTOR INFO
+    ?dataset cbhsv:sector ?sector .
+    ?sector skos:prefLabel ?sectorName.
+    FILTER(?sector in (<$P{SECTOR}>))
+
+    # YEAR CONSTRUCTION
+    ?dataset cbhsv:buildingAge/dcat:startDate ?buildingAgeStart .
+    ?dataset cbhsv:buildingAge/dcat:endDate ?buildingAgeEnd .
+    FILTER(?buildingAgeStart >= "$P{YEAR_START}-01-01"^^xsd:date)
+    FILTER(?buildingAgeEnd <= "$P{YEAR_END}-12-31"^^xsd:date)
+
+    # COUNTRY
+    ?dataset dcat:spatial/skos:prefLabel ?locationName .
+    FILTER(?locationName = "$P{COUNTRY}"@en)
+    # BUILDING TYPE
+    ?dataset cbhsv:btype ?buildingType.
+    ?buildingType skos:prefLabel ?buildingTypeName .
+    FILTER(?buildingType in (<$P{BUILDING_TYPE}>))
+
+    # ENERGY CONSUMPTION
+    ?dataset cbhsv:measurementValue ?measurementValue .
+
+    # ENERGY UNIT MEASUREMENT
+    ?dataset cbhsv:measurementUnit ?measurementUnit .
+
+    # ENERGY TYPE
+    ?dataset cbhsv:feature ?energyType .
+    ?energyType skos:prefLabel ?energyTypeName .
+    FILTER(?energyType in (<$P{ENERGY_TYPE}>))
+
+    # ENERGY USE
+    ?dataset cbhsv:type ?energyUse .
+    ?energyUse skos:prefLabel ?energyUseName .
+    FILTER(?energyUse in (<$P{ENERGY_USE}>))
+
+    BIND(CONCAT(STR(?measurementValue), " ", ?measurementUnit) AS ?AvgConsumption)
+}

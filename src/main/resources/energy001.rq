@@ -1,0 +1,51 @@
+prefix dcat: <http://www.w3.org/ns/dcat#>
+prefix dc: <http://purl.org/dc/elements/1.1/>
+prefix dct: <http://purl.org/dc/terms/>
+prefix freq: <http://purl.org/cld/freq/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix siec: <http://dd.eionet.europa.eu/vocabulary/eurostat/siec/>
+prefix nuts: <http://data.europa.eu/nuts/>
+prefix skos: <http://www.w3.org/2004/02/skos/core#>
+prefix adms: <http://www.w3.org/ns/adms#>
+prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix cbhsv: <https://data.builthub.eu/ontology/cbhsv#>
+
+SELECT DISTINCT ?datasetName ?period ?location ?nutsLevel ?measuredElement ?siec ?sector ?subsector ?btype ?ttype ?msrValue ?msrUnit (1 as ?recordCount)
+WHERE {
+  {
+	?s	a ?datasetIRI ;
+  		cbhsv:hasNUTS/nuts:level '0.0'^^xsd:decimal ;
+        rdf:type/rdfs:label ?datasetName ;
+  		dct:temporal/dcat:startDate ?startDate ;
+		dcat:spatial/skos:prefLabel ?location ;
+  		cbhsv:hasNUTS/nuts:level ?nutsLevel ;
+		cbhsv:measuredElement ?measuredElement;
+      	cbhsv:siec/skos:prefLabel ?siec ;
+		cbhsv:measurementUnit ?msrUnit;
+		cbhsv:measurementValue ?msrValue .
+    VALUES ?datasetIRI {cbhsv:Dataset014 cbhsv:Dataset015 cbhsv:Dataset016}
+    BIND(str(year(?startDate)) as ?period)
+		
+ 	FILTER (lang(?location) = 'en')
+  } UNION {
+	?s	a cbhsv:Dataset001 ;
+		cbhsv:topic <https://data.builthub.eu/resource/set/Topic/Energy> ;
+  		cbhsv:hasNUTS/nuts:level '0.0'^^xsd:decimal ;
+        rdf:type/rdfs:label ?datasetName ;
+		dct:temporal/dcat:startDate ?startDate ;
+		dct:temporal/dcat:endDate ?endDate ;
+		dcat:spatial/skos:prefLabel ?location ;
+  		cbhsv:hasNUTS/nuts:level ?nutsLevel ;
+		cbhsv:sector/skos:prefLabel ?sector ;
+  		cbhsv:subsector/skos:prefLabel ?subsector ;
+		cbhsv:type/skos:prefLabel ?ttype ;
+  		cbhsv:btype/skos:prefLabel ?btype ;
+  		cbhsv:feature/skos:prefLabel ?measuredElement ;
+		cbhsv:measurementUnit ?msrUnit;
+		cbhsv:measurementValue ?msrValue .
+    BIND(concat(concat(str(year(?startDate)), '-'), str(year(?endDate))) as ?period)
+        
+	FILTER (lang(?location) = 'en')
+  }
+}

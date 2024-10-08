@@ -1,0 +1,19 @@
+PREFIX cbhsv: <http://data.builthub.eu/ontology/cbhsv#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX ns72: <http://data.europa.eu/nuts/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+SELECT ?s2 ?locationName ?value2elect ?value2unit ?siec WHERE {
+    ?s2 a cbhsv:Dataset016 ;
+        dct:temporal/dcat:startDate "$P{YEAR}-01-01"^^xsd:date ;
+        cbhsv:hasNUTS/ns72:level "0.0"^^xsd:decimal .
+    ?s2 cbhsv:siec ?siec_uri . FILTER (?siec_uri in (<http://dd.eionet.europa.eu/vocabulary/eurostat/siec/O4630>,<http://dd.eionet.europa.eu/vocabulary/eurostat/siec/O4000>,<http://dd.eionet.europa.eu/vocabulary/eurostat/siec/SFF_P1000_S2000>,<http://dd.eionet.europa.eu/vocabulary/eurostat/siec/O4671>, <http://dd.eionet.europa.eu/vocabulary/eurostat/siec/O4669>, <http://dd.eionet.europa.eu/vocabulary/eurostat/siec/G3200>))
+    ?siec_uri skos:prefLabel ?siec .
+    ?s2 dcat:spatial/skos:prefLabel ?locationName ;
+        cbhsv:measurementUnit ?value2unit .
+    ?s2 cbhsv:measuredElement "$P{ENERGY_BALANCE}" .
+    ?s2 cbhsv:measurementValue ?value2elect.
+    FILTER (lang(?locationName) = 'en')
+}

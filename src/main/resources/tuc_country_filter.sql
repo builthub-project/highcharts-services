@@ -1,0 +1,1 @@
+SELECT DISTINCT name FROM "public"."dashboard_energy_tuc_002" ORDER BY name

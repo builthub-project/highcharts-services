@@ -1,0 +1,52 @@
+PREFIX cbhsv: <http://data.builthub.eu/ontology/cbhsv#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?nutsName ?Final_energy ?Average
+WHERE{
+  {
+    SELECT ?region ?nutsName (SUM(DISTINCT ?msrValue) AS ?Final_energy) ?nutsURI
+WHERE{
+    ?s  a cbhsv:Dataset001 ;
+        cbhsv:sector <http://data.builthub.eu/resource/set/Sector/ResidentialSector>;
+        cbhsv:subsector <http://data.builthub.eu/resource/set/SubSector/Total>;
+        cbhsv:feature <http://data.builthub.eu/resource/set/Feature/FinalEnergyConsumption>;
+        cbhsv:hasNUTS ?nutsURI ;
+        cbhsv:hasNUTS/skos:prefLabel ?nutsName ;
+        cbhsv:measurementValue ?msrValue .
+}
+GROUP BY ?nutsName ?region ?nutsURI
+}
+  {
+    SELECT ?region (AVG(?val) AS ?Average)
+WHERE{
+    {
+SELECT ?region ?nutsName (SUM(DISTINCT ?msrValue) AS ?val)
+WHERE{
+    ?s  a cbhsv:Dataset001 ;
+        cbhsv:hasNUTS ?nutsURI ;
+        cbhsv:hasNUTS/skos:prefLabel ?nutsName ;
+        cbhsv:sector <http://data.builthub.eu/resource/set/Sector/ResidentialSector>;
+        cbhsv:subsector <http://data.builthub.eu/resource/set/SubSector/Total>;
+        cbhsv:feature <http://data.builthub.eu/resource/set/Feature/FinalEnergyConsumption>;
+        cbhsv:measurementValue ?msrValue .
+    ?clireg a skos:Concept ;
+        skos:inScheme <http://data.builthub.eu/climate_regions> ;
+        skos:narrower ?nutsURI ;
+        skos:prefLabel ?region .
+}
+GROUP BY ?nutsName ?region
+    }
+}
+GROUP BY ?region
+}
+  {
+    SELECT ?region ?nutsURI
+WHERE{
+    ?clireg a skos:Concept ;
+        skos:inScheme <http://data.builthub.eu/climate_regions> ;
+        skos:narrower ?nutsURI ;
+        skos:prefLabel ?region .
+}
+}
+}
+ORDER BY ?region ?val
+LIMIT 30

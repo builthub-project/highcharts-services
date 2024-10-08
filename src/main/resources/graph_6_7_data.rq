@@ -1,0 +1,120 @@
+PREFIX cbhsv: <http://data.builthub.eu/ontology/cbhsv#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX ns72: <http://data.europa.eu/nuts/>
+prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT
+	?locationName
+	(((?value1 * (?value2elect / 100 )) * 100000 ) / ?value3 AS ?Electricity)
+	(((?value1 * (?value2heat / 100 )) * 100000 ) / ?value3 AS ?Heat)
+	(((?value1 * (?value2natgas / 100 )) * 100000 ) / ?value3 AS ?Natural_gas)
+	(((?value1 * (?value2oappebp / 100 )) * 100000 ) / ?value3 AS ?Oil_and_petroleum_products_excluding_biofuel_portion)
+	(((?value1 * (?value2ofn / 100 )) * 100000 ) / ?value3 AS ?Other_fuels_nec)
+	(((?value1 * (?value2rab / 100 )) * 100000 ) / ?value3 AS ?Renewables_and_biofuels)
+	(((?value1 * (?value2sff / 100 )) * 100000 ) / ?value3 AS ?Solid_fossil_fuels)
+WHERE
+{
+      {
+        SELECT DISTINCT ?locationName ?value1 WHERE {
+          ?s1 a cbhsv:Dataset014;
+            dct:temporal/dcat:startDate "2019-01-01"^^xsd:date;
+            dcat:spatial/skos:prefLabel ?locationName ;
+            cbhsv:measurementValue ?value1.
+	        FILTER (lang(?locationName) = 'en')
+        }
+      }
+      {
+        SELECT DISTINCT ?locationName ?value3 WHERE {
+          ?s3 a cbhsv:Dataset026;
+            dct:temporal/dcat:startDate "2019-01-01"^^xsd:date;
+            dcat:spatial/skos:prefLabel ?locationName ;
+            cbhsv:hasNUTS/ns72:level "0.0"^^xsd:decimal;
+            cbhsv:measuredElement <http://purl.org/linked-data/sdmx/2009/code#sex-T>;
+            cbhsv:measurementValue ?value3.
+	        FILTER (lang(?locationName) = 'en')
+        }
+      }
+      {
+        SELECT ?locationName ?value2elect WHERE {
+          ?s2 a cbhsv:Dataset015;
+            dct:temporal/dcat:startDate "2019-01-01"^^xsd:date;
+            cbhsv:hasNUTS/ns72:level "0.0"^^xsd:decimal;
+            cbhsv:siec <http://dd.eionet.europa.eu/vocabulary/eurostat/siec/E7000> ;
+            dcat:spatial/skos:prefLabel ?locationName ;
+            cbhsv:measurementValue ?value2elect.
+	        FILTER (lang(?locationName) = 'en')
+        }
+      }
+      {
+        SELECT ?locationName ?value2heat WHERE {
+          ?s2 a cbhsv:Dataset015;
+            dct:temporal/dcat:startDate "2019-01-01"^^xsd:date;
+            cbhsv:hasNUTS/ns72:level "0.0"^^xsd:decimal;
+            cbhsv:siec <http://dd.eionet.europa.eu/vocabulary/eurostat/siec/H8000> ;
+            dcat:spatial/skos:prefLabel ?locationName ;
+            cbhsv:measurementValue ?value2heat.
+	        FILTER (lang(?locationName) = 'en')
+        }
+      }
+      {
+        SELECT ?locationName ?value2natgas WHERE {
+          ?s2 a cbhsv:Dataset015;
+            dct:temporal/dcat:startDate "2019-01-01"^^xsd:date;
+            cbhsv:hasNUTS/ns72:level "0.0"^^xsd:decimal;
+            cbhsv:siec <http://dd.eionet.europa.eu/vocabulary/eurostat/siec/G3000> ;
+            dcat:spatial/skos:prefLabel ?locationName ;
+            cbhsv:measurementValue ?value2natgas.
+	        FILTER (lang(?locationName) = 'en')
+        }
+      }
+      {
+        SELECT ?locationName ?value2oappebp WHERE {
+          ?s2 a cbhsv:Dataset015;
+            dct:temporal/dcat:startDate "2019-01-01"^^xsd:date;
+            cbhsv:hasNUTS/ns72:level "0.0"^^xsd:decimal;
+            cbhsv:siec <http://dd.eionet.europa.eu/vocabulary/eurostat/siec/O4000XBIO> ;
+            dcat:spatial/skos:prefLabel ?locationName ;
+            cbhsv:measurementValue ?value2oappebp.
+	        FILTER (lang(?locationName) = 'en')
+        }
+      }
+      {
+        SELECT ?locationName ?value2ofn WHERE {
+          ?s2 a cbhsv:Dataset015;
+            dct:temporal/dcat:startDate "2019-01-01"^^xsd:date;
+            cbhsv:hasNUTS/ns72:level "0.0"^^xsd:decimal;
+            cbhsv:siec <http://dd.eionet.europa.eu/vocabulary/eurostat/siec/X9900> ;
+            dcat:spatial/skos:prefLabel ?locationName ;
+            cbhsv:measurementValue ?value2ofn.
+	        FILTER (lang(?locationName) = 'en')
+        }
+      }
+      {
+        SELECT ?locationName ?value2rab WHERE {
+          ?s2 a cbhsv:Dataset015;
+            dct:temporal/dcat:startDate "2019-01-01"^^xsd:date;
+            cbhsv:hasNUTS/ns72:level "0.0"^^xsd:decimal;
+            cbhsv:siec <http://dd.eionet.europa.eu/vocabulary/eurostat/siec/RA000> ;
+            dcat:spatial/skos:prefLabel ?locationName ;
+            cbhsv:measurementValue ?value2rab.
+	        FILTER (lang(?locationName) = 'en')
+        }
+      }
+      {
+        SELECT ?locationName ?value2sff WHERE {
+          ?s2 a cbhsv:Dataset015;
+            dct:temporal/dcat:startDate "2019-01-01"^^xsd:date;
+            cbhsv:hasNUTS/ns72:level "0.0"^^xsd:decimal;
+            cbhsv:siec <http://dd.eionet.europa.eu/vocabulary/eurostat/siec/C0000X0350-0370> ;
+            dcat:spatial/skos:prefLabel ?locationName ;
+            cbhsv:measurementValue ?value2sff.
+	        FILTER (lang(?locationName) = 'en')
+        }
+      }
+}
+ORDER BY ?locationName
+LIMIT 30

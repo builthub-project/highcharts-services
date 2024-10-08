@@ -1,0 +1,80 @@
+PREFIX cbhsv: <http://data.builthub.eu/ontology/cbhsv#>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+SELECT ?nutsName ?1945_1969 ?total1 ?1970_1979 (?total1 AS ?total2) ?1980_1989 (?total1 AS ?total3) ?1990_1999 (?total1 AS ?total4) ?2000_2010 (?total1 AS ?total5) WHERE {
+  {
+    SELECT ?nutsName (SUM(?msrValue) AS ?1945_1969) WHERE {
+      ?s a cbhsv:Dataset001;
+        (cbhsv:buildingAge/dcat:startDate) "1945-01-01"^^xsd:date;
+        (cbhsv:hasNUTS/skos:prefLabel) ?nutsName;
+        cbhsv:sector <http://data.builthub.eu/resource/set/Sector/ResidentialSector>;
+        cbhsv:subsector <http://data.builthub.eu/resource/set/SubSector/Total>;
+        cbhsv:feature <http://data.builthub.eu/resource/set/Feature/FinalEnergyConsumption>;
+        cbhsv:measurementValue ?msrValue.
+    }
+    GROUP BY ?nutsName
+  }
+  {
+    SELECT ?nutsName (SUM(?msrValue) AS ?1970_1979) WHERE {
+      ?s a cbhsv:Dataset001;
+        (cbhsv:buildingAge/dcat:startDate) "1970-01-01"^^xsd:date;
+        (cbhsv:hasNUTS/skos:prefLabel) ?nutsName;
+        cbhsv:sector <http://data.builthub.eu/resource/set/Sector/ResidentialSector>;
+        cbhsv:subsector <http://data.builthub.eu/resource/set/SubSector/Total>;
+        cbhsv:feature <http://data.builthub.eu/resource/set/Feature/FinalEnergyConsumption>;
+        cbhsv:measurementValue ?msrValue.
+    }
+    GROUP BY ?nutsName
+  }
+  {
+    SELECT ?nutsName (SUM(?msrValue) AS ?1980_1989) WHERE {
+      ?s a cbhsv:Dataset001;
+        (cbhsv:buildingAge/dcat:startDate) "1980-01-01"^^xsd:date;
+        (cbhsv:hasNUTS/skos:prefLabel) ?nutsName;
+        cbhsv:sector <http://data.builthub.eu/resource/set/Sector/ResidentialSector>;
+        cbhsv:subsector <http://data.builthub.eu/resource/set/SubSector/Total>;
+        cbhsv:feature <http://data.builthub.eu/resource/set/Feature/FinalEnergyConsumption>;
+        cbhsv:measurementValue ?msrValue.
+    }
+    GROUP BY ?nutsName
+  }
+  {
+    SELECT ?nutsName (SUM(?msrValue) AS ?1990_1999) WHERE {
+      ?s a cbhsv:Dataset001;
+        (cbhsv:buildingAge/dcat:startDate) "1990-01-01"^^xsd:date;
+        (cbhsv:hasNUTS/skos:prefLabel) ?nutsName;
+        cbhsv:sector <http://data.builthub.eu/resource/set/Sector/ResidentialSector>;
+        cbhsv:subsector <http://data.builthub.eu/resource/set/SubSector/Total>;
+        cbhsv:feature <http://data.builthub.eu/resource/set/Feature/FinalEnergyConsumption>;
+        cbhsv:measurementValue ?msrValue.
+    }
+    GROUP BY ?nutsName
+  }
+  {
+    SELECT ?nutsName (SUM(?msrValue) AS ?2000_2010) WHERE {
+      ?s a cbhsv:Dataset001;
+        (cbhsv:buildingAge/dcat:startDate) "2000-01-01"^^xsd:date;
+        (cbhsv:hasNUTS/skos:prefLabel) ?nutsName;
+        cbhsv:sector <http://data.builthub.eu/resource/set/Sector/ResidentialSector>;
+        cbhsv:subsector <http://data.builthub.eu/resource/set/SubSector/Total>;
+        cbhsv:feature <http://data.builthub.eu/resource/set/Feature/FinalEnergyConsumption>;
+        cbhsv:measurementValue ?msrValue.
+    }
+    GROUP BY ?nutsName
+  }
+  {
+    SELECT ?nutsName (SUM(?msrValue) AS ?total1) WHERE {
+      ?s a cbhsv:Dataset001;
+        (cbhsv:hasNUTS/skos:prefLabel) ?nutsName;
+        cbhsv:sector <http://data.builthub.eu/resource/set/Sector/ResidentialSector>;
+        cbhsv:subsector <http://data.builthub.eu/resource/set/SubSector/Total>;
+        cbhsv:feature <http://data.builthub.eu/resource/set/Feature/FinalEnergyConsumption>;
+        cbhsv:measurementValue ?msrValue.
+    }
+    GROUP BY ?nutsName
+  }
+}
+ORDER BY (?nutsName)
+LIMIT 30

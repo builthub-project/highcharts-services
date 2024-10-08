@@ -1,0 +1,9 @@
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?region (COUNT(?nutsURI) AS ?amount)
+WHERE {
+  ?clireg a skos:Concept ;
+        skos:inScheme <http://data.builthub.eu/climate_regions> ;
+        skos:prefLabel ?region ;
+        skos:narrower ?nutsURI .
+  }
+GROUP BY ?region
